@@ -1,0 +1,151 @@
+# Importing the necessary Libraries
+import pandas as pd
+from pandas import *
+import datetime as dt
+import matplotlib.pyplot as plt
+
+# Reading and storing the necessary CSV files into dataframes
+patient_data = pd.read_csv('Patients_main.csv')
+admin_data = pd.read_csv('Admin_Data.csv')
+
+
+def create_patient_account():
+    # Add the patient's details to the dataframe
+    pid = input("Enter Patient ID: ")
+    pname = input("Enter Patient First Name: ")
+    plname = input("Enter Patient Last Name: ")
+    pgender = input("Enter Patient Gender(M/F): ")
+    pbday = input("Enter Patient Date of Birth (dd-mm-yyyy): ")
+    pcontact = input("Enter Patient Contact Number: ")
+    pemail = input("Enter Patient Gmail Address: ")
+    pallergies = input("Enter Patient Allergies(If Any): ")
+    patient_data.loc[len(patient_data.index)] = [pid, pname,plname , pgender, pbday, pcontact, pemail, pallergies]
+    
+    # Save the dataframe to the CSV file
+    patient_data.to_csv('Patients_main.csv', index=False)
+    print("Congratulations")
+    print("New Account Created")
+
+def create_admin_account():
+    exist_aid = int(input("ID of Existing Admin: "))
+    exist_apass = input("Password of Existing Admin: ")
+    result1 = admin_data[(admin_data["Admin_ID"] == exist_aid) & (admin_data["Admin_Password"] == exist_apass.lower())]
+    if result1.empty:
+        print("Try Again")
+    else:
+        # Add the admin's details to the dataframe
+        aid = len(admin_data)+1
+        apass = input("Enter Admin Password: ")
+        aname = input("Enter Admin Name: ")
+        aemail = input("Enter Admin Email Address: ")
+        acontact = input("Enter Admin Contact Number: ")
+        admin_data.loc[len(admin_data.index)] = [aid, apass, aname, aemail, acontact]
+
+        # Save the dataframe to the CSV file
+        admin_data.to_csv('Admin_Data.csv', index=False)
+        print("Congratulations")
+        print("New Account Created")
+
+
+def patient_login():
+    email = input("Enter Patient Email: ")
+    password = input("Enter Patient Password: ")
+
+    patient_data = pd.read_csv('Patient_Data.csv')
+    if (patient_data[''] == email).any():
+        if (patient_data['Password'] == password).any():
+            print("Patient Logged In Successfully")
+        else:
+            print("Incorrect Patient Password")
+    else:
+        print("Incorrect Patient Email")
+
+def admin_login():
+    # Search for the admin in the dataframe
+    login_id = int(input("Enter Your Login ID: "))
+    login_pass = input("Enter your Password: ")
+    result = admin_data[(admin_data["Admin_ID"] == login_id) & (admin_data["Admin_Password"] == login_pass.lower())]
+    if result.empty:
+        # Print the result
+        print("You Are Not Registered Here")
+        print("Please Register First")
+    else:
+        # Print the admin's details
+        print("You Are Now Looged In")
+        print("Name: ", result.iloc[0]['Admin_Name'])
+        print("Email Address: ", result.iloc[0]['Admin_Email'])
+        print("Contact Number: ", result.iloc[0]['Admin_Contact'])
+        admin_details()
+
+def admin_details():
+    data_change_choice = input("Do You Wish To Change Any Above Data?(Yes/No)")
+    if data_change_choice == 'yes':
+        for i in range():
+            dcc = input("Which Data Do You Wish To Change\n",patient_Data.columns[i])
+        else:
+            print("H")
+
+def graph():
+    ad = patient_data['Gender'].tolist()
+    mno=0
+    fno=0
+    for i in range(len(patient_data.Gender)):
+        if ad[i]=='M':
+            mno+=1
+        elif ad[i]=='F':
+            fno+=1
+    l=['M',"F"]
+    l2=[mno,fno]
+    graph_choice = input("Which Type of Graph Do You Want For The Number of Patients(Bar/Line)?")
+    if graph_choice.lower() == 'bar':
+        plt.bar(l,l2,color=['blue','pink'],label=["BOYS","GIRLS"])
+        plt.title("Number of Patients Gender Wise(Bar)")
+        plt.grid()
+        plt.yticks([0,1,2,3,4,5,6,7,8,9,10])
+        plt.legend()
+        plt.show()
+    elif graph_choice.lower() == 'line':
+        # Plotting the line graph
+        plt.plot(x_values, y_values, marker='o', linestyle='-', color='b', label='Line Graph')
+
+        # Adding labels and title
+        plt.xlabel('X-axis Label')
+        plt.ylabel('Y-axis Label')
+        plt.title('Simple Line Graph')
+
+        # Displaying legend
+        plt.legend()
+
+        # Show plot
+        plt.grid(True)
+        plt.show()
+    else:
+        print("Invalid Option")
+
+def menu():
+    while True:
+        print("Select an Option:")
+        print("1. Create Patient Account")
+        print("2. Create Admin Account")
+        print("3. Patient Login")
+        print("4. Admin Login")
+        print("5. Graph")
+        print("6. Exit")
+        option = int(input("Enter Option Number: "))
+
+        if option == 1:
+            create_patient_account()
+        elif option == 2:
+            create_admin_account()
+        elif option == 3:
+            patient_login()
+        elif option == 4:
+            admin_login()
+        elif option == 5:
+            graph()
+        elif option == 6:
+            break
+        else:
+            print("Invalid Option")
+
+menu()

@@ -9,7 +9,7 @@ admin_data = pd.read_csv('Admin_Data.csv')
 
 def create_patient_account():
     # Add the patient's details to the dataframe
-    pid = input("Enter Patient ID: ")
+    pid = len(patient_data) + 1
     pname = input("Enter Patient First Name: ")
     plname = input("Enter Patient Last Name: ")
     pgender = input("Enter Patient Gender(M/F): ")
